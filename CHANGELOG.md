@@ -2,6 +2,20 @@
 
 ## [2024-02-09]
 
+### Added
+- Interactive dashboard features with filterable views
+- Toggleable key metrics visibility controls
+- Dynamic data visualization with charts and graphs
+- Real-time portfolio data updates
+- Improved transaction synchronization
+
+### Changed
+- Enhanced UI polish with gradient background
+- Improved card hover effects and transitions
+- Added smooth button animations
+- Refined dashboard spacing and layout
+- Removed sample data in favor of real-time calculations
+
 ### Changed
 - Enhanced UI polish with gradient background
 - Improved card hover effects and transitions

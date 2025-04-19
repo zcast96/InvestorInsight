@@ -11,6 +11,7 @@ import Holdings from "@/pages/Holdings";
 import HoldingDetail from "@/pages/HoldingDetail";
 import AddTransaction from "@/pages/AddTransaction";
 import AddManualAsset from "@/pages/AddManualAsset";
+import ImportCSV from "@/pages/ImportCSV";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/not-found";
 
@@ -23,6 +24,7 @@ function Router() {
         <Route path="/holdings/:id" component={HoldingDetail} />
         <Route path="/add-transaction" component={AddTransaction} />
         <Route path="/add-manual-asset" component={AddManualAsset} />
+        <Route path="/import-csv" component={ImportCSV} />
         <Route path="/settings" component={Settings} />
         <Route component={NotFound} />
       </Switch>

@@ -27,6 +27,8 @@ export function ValueChangeIndicator({
     animate: { opacity: 1, y: 0 },
   };
 
+  const isNegative = value < 0;
+  
   return (
     <motion.div
       className={cn(

@@ -12,6 +12,9 @@ const Dashboard: React.FC = () => {
     <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
       {/* Portfolio Summary Cards */}
       <PortfolioSummary />
+      
+      {/* Profit/Loss Analysis */}
+      <ProfitLossAnalysis />
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">

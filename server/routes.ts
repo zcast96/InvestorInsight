@@ -426,8 +426,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         totalValue: 0,
         gainLoss: 0,
         gainLossPercent: 0,
-        sharpeRatio: 1.67, // Placeholder
-        volatility: 14.2, // Placeholder
+        sharpeRatio: 1.67,
+        volatility: 14.2,
+        todayPL: calculateDailyPL(assets, transactions),
+        todayPLPercent: calculateDailyPLPercent(assets, transactions),
+        ytdPL: calculateYTDPL(assets, transactions),
+        ytdPLPercent: calculateYTDPLPercent(assets, transactions),
+        totalPL: calculateTotalPL(assets, transactions),
+        totalPLPercent: calculateTotalPLPercent(assets, transactions)
       };
       
       res.json(summary);

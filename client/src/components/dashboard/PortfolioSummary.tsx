@@ -9,6 +9,19 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const PortfolioSummary: React.FC = () => {
   const { data, isLoading, error } = usePortfolioSummary();
+  const [visibleMetrics, setVisibleMetrics] = React.useState({
+    totalValue: true,
+    gainLoss: true,
+    sharpeRatio: true,
+    volatility: true
+  });
+
+  const toggleMetric = (metric: string) => {
+    setVisibleMetrics(prev => ({
+      ...prev,
+      [metric]: !prev[metric as keyof typeof prev]
+    }));
+  };
 
   if (isLoading) {
     return (
@@ -37,11 +50,25 @@ const PortfolioSummary: React.FC = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-gray-500">Total Value</h3>
+    <>
+      <div className="flex gap-2 mb-4">
+        {Object.entries(visibleMetrics).map(([metric, isVisible]) => (
+          <Button
+            key={metric}
+            variant={isVisible ? "default" : "outline"}
+            size="sm"
+            onClick={() => toggleMetric(metric)}
+          >
+            {metric.replace(/([A-Z])/g, ' $1').trim()}
+          </Button>
+        ))}
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      {visibleMetrics.totalValue && (
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-medium text-gray-500">Total Value</h3>
             <DollarSign className="h-4 w-4 text-gray-400" />
           </div>
           <p className="text-2xl font-semibold mt-2">{formatCurrency(data?.totalValue || 0)}</p>

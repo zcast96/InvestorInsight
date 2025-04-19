@@ -71,6 +71,17 @@ const PerformanceChart: React.FC = () => {
   const chartOptions: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
+    interaction: {
+      mode: 'nearest',
+      axis: 'x',
+      intersect: false
+    },
+    animations: {
+      tension: {
+        duration: 1000,
+        easing: 'linear'
+      }
+    },
     scales: {
       x: {
         grid: {

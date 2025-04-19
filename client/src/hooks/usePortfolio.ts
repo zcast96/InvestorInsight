@@ -13,10 +13,23 @@ import {
 } from '@/lib/types';
 
 // Get portfolio summary
-export function usePortfolioSummary() {
-  return useQuery({
-    queryKey: ['/api/portfolio/summary'],
-    staleTime: 5 * 60 * 1000, // 5 minutes
+export function usePortfolioSummary(filters?: { 
+  startDate?: string;
+  endDate?: string;
+  assetClass?: string;
+}) {
+  return useQuery<PortfolioSummary>({
+    queryKey: ['/api/portfolio/summary', filters],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      if (filters?.startDate) params.append('startDate', filters.startDate);
+      if (filters?.endDate) params.append('endDate', filters.endDate);
+      if (filters?.assetClass) params.append('assetClass', filters.assetClass);
+
+      const response = await fetch(`/api/portfolio/summary?${params}`);
+      if (!response.ok) throw new Error('Failed to fetch portfolio summary');
+      return response.json();
+    }
   });
 }
 
@@ -63,7 +76,7 @@ export function useSettings(userId: number = DEFAULT_USER_ID) {
 // Update settings
 export function useUpdateSettings(userId: number = DEFAULT_USER_ID) {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (settings: Partial<Settings>) => {
       const response = await apiRequest('PATCH', `/api/settings/${userId}`, settings);
@@ -78,7 +91,7 @@ export function useUpdateSettings(userId: number = DEFAULT_USER_ID) {
 // Refresh portfolio data
 export function useRefreshPortfolioData() {
   const queryClient = useQueryClient();
-  
+
   return () => {
     queryClient.invalidateQueries({ queryKey: ['/api/portfolio/summary'] });
     queryClient.invalidateQueries({ queryKey: ['/api/portfolio/allocation'] });

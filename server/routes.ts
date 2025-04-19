@@ -1,11 +1,13 @@
 // IMPORTANT: Before modifying this file, please update CHANGELOG.md with a summary of your changes. Also, make clear comments about every change in this file and what it was replacing so that we don't end up trying the same fixes repeatedly.
 
-import type { Express, Request, Response } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { alphaVantageService } from "./services/alphaVantage";
+import { csvImportService } from "./services/csvImport";
 import { insertAssetSchema, insertTransactionSchema, insertManualAssetValueSchema, insertFundamentalMetricsSchema, insertSettingsSchema } from "@shared/schema";
 import { z } from "zod";
+import multer from "multer";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // === Assets API ===

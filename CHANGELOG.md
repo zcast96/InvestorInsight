@@ -1,5 +1,13 @@
 # Changelog
 
+## [2024-02-09]
+
+### Changed
+- Enhanced UI polish with gradient background
+- Improved card hover effects and transitions
+- Added smooth button animations
+- Refined dashboard spacing and layout
+
 ## [2023-07-15]
 
 ### Added

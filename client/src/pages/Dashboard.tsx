@@ -9,7 +9,7 @@ import TopHoldings from '@/components/dashboard/TopHoldings';
 
 const Dashboard: React.FC = () => {
   return (
-    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
       {/* Portfolio Summary Cards */}
       <PortfolioSummary />
 

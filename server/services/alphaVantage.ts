@@ -7,12 +7,17 @@ const BASE_URL = 'https://www.alphavantage.co/query';
 const DELAY_BETWEEN_CALLS_MS = 1000; // 1 second delay
 let lastCallTime = 0;
 
+console.log('AlphaVantage API Configuration:');
+console.log('- API_KEY:', API_KEY === 'demo' ? 'Using demo key (limited functionality)' : 'Using custom API key');
+console.log('- Environment variable present:', !!process.env.ALPHA_VANTAGE_API_KEY);
+
 async function delayIfNeeded() {
   const now = Date.now();
   const timeSinceLastCall = now - lastCallTime;
   
   if (timeSinceLastCall < DELAY_BETWEEN_CALLS_MS && lastCallTime !== 0) {
     const delayTime = DELAY_BETWEEN_CALLS_MS - timeSinceLastCall;
+    console.log(`Rate limiting: Waiting ${delayTime}ms before making API request`);
     await new Promise(resolve => setTimeout(resolve, delayTime));
   }
   

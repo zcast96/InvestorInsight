@@ -6,21 +6,19 @@ interface PageTransitionProps {
   className?: string;
 }
 
-const variants = {
-  hidden: { opacity: 0, x: 0, y: 20 },
-  enter: { opacity: 1, x: 0, y: 0 },
-  exit: { opacity: 0, x: 0, y: 20 }
-};
-
 export function PageTransition({ children, className = "" }: PageTransitionProps) {
   return (
     <motion.div
-      initial="hidden"
-      animate="enter"
-      exit="exit"
-      variants={variants}
-      transition={{ duration: 0.4, type: "easeInOut" }}
-      className={className}
+      className={`w-full ${className}`}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
+        duration: 0.3
+      }}
     >
       {children}
     </motion.div>

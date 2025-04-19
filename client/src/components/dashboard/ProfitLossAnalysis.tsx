@@ -3,11 +3,11 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { ValueChangeIndicator } from '@/components/animations/ValueChangeIndicator';
-import { usePortfolio } from '@/hooks/usePortfolio';
+import { usePortfolioSummary } from '@/hooks/usePortfolio';
 import { AnimatedCounter } from '@/components/animations/AnimatedCounter';
 
 const ProfitLossAnalysis: React.FC = () => {
-  const { data: portfolio } = usePortfolio();
+  const { data: portfolio } = usePortfolioSummary();
   
   const metrics = {
     daily: { value: 2.5, amount: 1250.00 },

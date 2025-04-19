@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useLocation, Link } from 'wouter';
-import { BarChart3, List, PlusCircle, Settings, FileText, Upload } from 'lucide-react';
+import { BarChart3, List, PlusCircle, Settings, FileText as FileIcon, Upload } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const Sidebar: React.FC = () => {

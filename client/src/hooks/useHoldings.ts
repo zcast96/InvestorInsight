@@ -37,7 +37,7 @@ export function useAsset(id: number | null) {
 // Create asset mutation
 export function useCreateAsset() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (asset: Omit<Asset, 'id' | 'createdAt' | 'updatedAt'>) => {
       const response = await apiRequest('POST', '/api/assets', asset);
@@ -52,7 +52,7 @@ export function useCreateAsset() {
 // Update asset mutation
 export function useUpdateAsset() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async ({ id, data }: { id: number; data: Partial<Asset> }) => {
       const response = await apiRequest('PATCH', `/api/assets/${id}`, data);
@@ -68,7 +68,7 @@ export function useUpdateAsset() {
 // Delete asset mutation
 export function useDeleteAsset() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (id: number) => {
       await apiRequest('DELETE', `/api/assets/${id}`);
@@ -94,17 +94,17 @@ export function useTransactionsByAssetId(assetId: number | null) {
 // Create transaction mutation
 export function useCreateTransaction() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (transaction: TransactionFormData) => {
       // First get or create the asset
       let assetId: number;
-      
+
       try {
         // Check if asset with ticker exists
         const assetResponse = await fetch(`/api/assets?ticker=${transaction.ticker}`);
         const assets = await assetResponse.json();
-        
+
         if (assets.length > 0) {
           assetId = assets[0].id;
         } else {
@@ -118,7 +118,7 @@ export function useCreateTransaction() {
           const newAsset = await createAssetResponse.json();
           assetId = newAsset.id;
         }
-        
+
         // Create transaction
         const createTransactionResponse = await apiRequest('POST', '/api/transactions', {
           assetId,
@@ -128,7 +128,7 @@ export function useCreateTransaction() {
           date: new Date(transaction.date),
           commission: transaction.includeCommission ? transaction.commission : undefined
         });
-        
+
         return createTransactionResponse.json();
       } catch (error) {
         console.error('Error creating transaction:', error);
@@ -138,8 +138,12 @@ export function useCreateTransaction() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/assets'] });
       queryClient.invalidateQueries({ queryKey: ['/api/transactions'] });
-      // We don't know which asset was affected, so refresh portfolio data
-      queryClient.invalidateQueries({ queryKey: ['/api/portfolio'] });
+      // Invalidate all portfolio-related queries
+      queryClient.invalidateQueries({ queryKey: ['/api/portfolio/summary'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/portfolio/allocation'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/portfolio/diversification'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/portfolio/performance'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/portfolio/top-holdings'] });
     },
   });
 }
@@ -147,7 +151,7 @@ export function useCreateTransaction() {
 // Update transaction mutation
 export function useUpdateTransaction() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async ({ id, data }: { id: number; data: Partial<Transaction> }) => {
       const response = await apiRequest('PATCH', `/api/transactions/${id}`, data);
@@ -165,7 +169,7 @@ export function useUpdateTransaction() {
 // Delete transaction mutation
 export function useDeleteTransaction() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (id: number) => {
       await apiRequest('DELETE', `/api/transactions/${id}`);
@@ -193,7 +197,7 @@ export function useManualAssetValuesByAssetId(assetId: number | null) {
 // Create manual asset value mutation (for manual assets)
 export function useCreateManualAsset() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (data: ManualAssetFormData) => {
       try {
@@ -204,14 +208,14 @@ export function useCreateManualAsset() {
           isManual: true
         });
         const newAsset = await createAssetResponse.json();
-        
+
         // Create manual value
         const createValueResponse = await apiRequest('POST', '/api/manual-values', {
           assetId: newAsset.id,
           value: data.currentValue,
           date: new Date()
         });
-        
+
         return {
           asset: newAsset,
           value: await createValueResponse.json()
@@ -231,7 +235,7 @@ export function useCreateManualAsset() {
 // Update manual asset value mutation
 export function useUpdateManualAssetValue() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async ({ assetId, value }: { assetId: number; value: number }) => {
       const response = await apiRequest('POST', '/api/manual-values', {
@@ -262,7 +266,7 @@ export function useFundamentalMetricsByAssetId(assetId: number | null) {
 // Update fundamental metrics mutation
 export function useUpdateFundamentalMetrics() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async ({ assetId, data }: { assetId: number; data: FundamentalMetricsFormData }) => {
       const response = await apiRequest('POST', '/api/metrics', {

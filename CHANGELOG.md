@@ -17,6 +17,7 @@
 ### Fixed
 - Fixed hook import in AppShell.tsx - changed useMobile to useIsMobile to match exported hook name
 - Added missing dependencies: react-chartjs-2 and chart.js for chart functionality
+- Fixed invalid DOM nesting in Sidebar and MobileNav components by refactoring navigation links
 
 ### Removed
 - N/A (initial release)

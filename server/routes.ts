@@ -356,6 +356,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Failed to retrieve benchmark data" });
     }
   });
+  
+  // Get company earnings
+  app.get("/api/market/earnings/:symbol", async (req: Request, res: Response) => {
+    try {
+      const { symbol } = req.params;
+      const earnings = await alphaVantageService.getCompanyEarnings(symbol);
+      res.json(earnings);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to retrieve company earnings" });
+    }
+  });
+  
+  // Get income statement
+  app.get("/api/market/income/:symbol", async (req: Request, res: Response) => {
+    try {
+      const { symbol } = req.params;
+      const incomeStatement = await alphaVantageService.getIncomeStatement(symbol);
+      res.json(incomeStatement);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to retrieve income statement" });
+    }
+  });
+  
+  // Get balance sheet
+  app.get("/api/market/balance/:symbol", async (req: Request, res: Response) => {
+    try {
+      const { symbol } = req.params;
+      const balanceSheet = await alphaVantageService.getBalanceSheet(symbol);
+      res.json(balanceSheet);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to retrieve balance sheet" });
+    }
+  });
+  
+  // Get cash flow
+  app.get("/api/market/cashflow/:symbol", async (req: Request, res: Response) => {
+    try {
+      const { symbol } = req.params;
+      const cashFlow = await alphaVantageService.getCashFlow(symbol);
+      res.json(cashFlow);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to retrieve cash flow data" });
+    }
+  });
+  
+  // Get sector performance
+  app.get("/api/market/sectors", async (_req: Request, res: Response) => {
+    try {
+      const sectors = await alphaVantageService.getSectorPerformance();
+      res.json(sectors);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to retrieve sector performance data" });
+    }
+  });
 
   // === Portfolio Analytics API ===
   

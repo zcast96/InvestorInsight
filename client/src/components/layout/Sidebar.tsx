@@ -35,23 +35,10 @@ const Sidebar: React.FC = () => {
         <h2 className="text-lg font-medium text-gray-800">Navigation</h2>
       </div>
       <nav className="flex-1">
-        <div className="px-4 py-2">
-          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Overview</h3>
-        </div>
         <NavItem href="/" icon={BarChart3} label="Dashboard" />
         <NavItem href="/holdings" icon={List} label="Holdings" />
-        
-        <div className="px-4 py-2 mt-4">
-          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Management</h3>
-        </div>
-        <NavItem href="/add-transaction" icon={PlusCircle} label="Add Transaction" />
-        <NavItem href="/add-manual-asset" icon={FileText} label="Manual Asset" />
-        <NavItem href="/import-csv" icon={Upload} label="Import CSV" />
-        
-        <div className="px-4 py-2 mt-4">
-          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Settings</h3>
-        </div>
-        <NavItem href="/settings" icon={Settings} label="Preferences" />
+        <NavItem href="/add-transaction" icon={PlusCircle} label="Add Asset" />
+        <NavItem href="/settings" icon={Settings} label="Settings" />
       </nav>
     </aside>
   );

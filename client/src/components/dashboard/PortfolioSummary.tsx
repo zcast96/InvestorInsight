@@ -64,29 +64,31 @@ const PortfolioSummary: React.FC = () => {
         ))}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-      {visibleMetrics.totalValue && (
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-medium text-gray-500">Total Value</h3>
-            <DollarSign className="h-4 w-4 text-gray-400" />
-          </div>
-          <p className="text-2xl font-semibold mt-2">{formatCurrency(data?.totalValue || 0)}</p>
-          <div className="flex items-center mt-2">
-            <span className={cn("text-sm flex items-center", getValueColorClass(data?.gainLossPercent || 0))}>
-              {data?.gainLossPercent && data.gainLossPercent > 0 ? (
-                <TrendingUp className="h-3 w-3 mr-1" />
-              ) : (
-                <TrendingUp className="h-3 w-3 mr-1 rotate-180" />
-              )}
-              {formatPercentage(data?.gainLossPercent || 0)}
-            </span>
-            <span className="text-xs text-gray-500 ml-2">Today</span>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {visibleMetrics.totalValue && (
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-medium text-gray-500">Total Value</h3>
+              <DollarSign className="h-4 w-4 text-gray-400" />
+            </div>
+            <p className="text-2xl font-semibold mt-2">{formatCurrency(data?.totalValue || 0)}</p>
+            <div className="flex items-center mt-2">
+              <span className={cn("text-sm flex items-center", getValueColorClass(data?.gainLossPercent || 0))}>
+                {data?.gainLossPercent && data.gainLossPercent > 0 ? (
+                  <TrendingUp className="h-3 w-3 mr-1" />
+                ) : (
+                  <TrendingUp className="h-3 w-3 mr-1 rotate-180" />
+                )}
+                {formatPercentage(data?.gainLossPercent || 0)}
+              </span>
+              <span className="text-xs text-gray-500 ml-2">Today</span>
+            </div>
+          </CardContent>
+        </Card>
+        )}
 
-      <Card>
+        <Card>
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-medium text-gray-500">Gain/Loss YTD</h3>

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import PortfolioSummary from '@/components/dashboard/PortfolioSummary';
+import ProfitLossAnalysis from '@/components/dashboard/ProfitLossAnalysis';
 import AssetAllocationChart from '@/components/dashboard/AssetAllocationChart';
 import SectorDiversificationChart from '@/components/dashboard/SectorDiversificationChart';
 import PerformanceChart from '@/components/dashboard/PerformanceChart';

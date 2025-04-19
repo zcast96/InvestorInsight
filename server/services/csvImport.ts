@@ -101,8 +101,6 @@ export class CSVImportService {
         ticker: record.Symbol,
         name: record.Symbol, // Use ticker as name temporarily
         assetClass: 'Equities',
-        currentPrice: price,
-        currency: 'USD',
       });
     }
 
@@ -111,10 +109,9 @@ export class CSVImportService {
       assetId: asset.id,
       date: tradeDate,
       type: quantity > 0 ? 'buy' : 'sell',
-      quantity: Math.abs(quantity),
-      price,
-      fee,
-      notes: `Imported from CSV on ${new Date().toISOString().split('T')[0]}`,
+      shares: Math.abs(quantity).toString(),
+      price: price.toString(),
+      commission: fee ? fee.toString() : undefined,
     };
 
     await storage.createTransaction(transaction);

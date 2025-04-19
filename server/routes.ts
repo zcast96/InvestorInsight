@@ -554,6 +554,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // === CSV Import API ===
+  
+  // Set up multer for file uploads
+  const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+      fileSize: 5 * 1024 * 1024, // 5MB limit
+    },
+  });
+  
+  // Import transactions from CSV
+  app.post("/api/import/csv", upload.single('file'), async (req: Request, res: Response) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: "No file uploaded" });
+      }
+      
+      // Check file type (should be CSV)
+      if (req.file.mimetype !== 'text/csv' && !req.file.originalname.endsWith('.csv')) {
+        return res.status(400).json({ error: "Invalid file type. Please upload a CSV file" });
+      }
+      
+      // Process the CSV file
+      const fileContent = req.file.buffer.toString('utf-8');
+      const importResult = await csvImportService.processTransactionsCSV(fileContent);
+      
+      res.json(importResult);
+    } catch (error) {
+      console.error('CSV import error:', error);
+      res.status(500).json({ 
+        error: "Failed to process CSV file",
+        message: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

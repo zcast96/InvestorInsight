@@ -3,25 +3,6 @@
 ## [2024-02-09]
 
 ### Added
-- New ProfitLossAnalysis component with daily, YTD, and total P/L metrics
-- Enhanced navigation structure with categorized sections (Overview, Management, Settings)
-- New Import CSV option in Management section
-- Manual Asset entry option in Management section
-
-### Changed
-- Improved sidebar organization with clear section headers
-- Enhanced portfolio tracking capabilities
-- Updated Dashboard layout to include P/L analysis
-- Refined API response handling for better performance
-
-### Fixed
-- Error handling in transaction processing
-- Navigation menu structure and routing
-- Data refresh mechanism for real-time updates
-
-## [2024-02-09]
-
-### Added
 - Interactive dashboard features with filterable views
 - Toggleable key metrics visibility controls
 - Dynamic data visualization with charts and graphs

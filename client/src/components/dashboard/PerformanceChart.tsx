@@ -207,6 +207,32 @@ const PerformanceChart: React.FC = () => {
         <div className="h-72">
           <Line data={chartData} options={chartOptions} />
         </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 p-4 border-t">
+          <div className="text-center">
+            <p className="text-sm text-gray-500">Alpha</p>
+            <p className="text-lg font-semibold">
+              {formatPercentage(riskMetrics?.alpha || 0)}
+            </p>
+          </div>
+          <div className="text-center">
+            <p className="text-sm text-gray-500">Beta</p>
+            <p className="text-lg font-semibold">
+              {(riskMetrics?.beta || 0).toFixed(2)}
+            </p>
+          </div>
+          <div className="text-center">
+            <p className="text-sm text-gray-500">Sharpe Ratio</p>
+            <p className="text-lg font-semibold">
+              {(riskMetrics?.sharpeRatio || 0).toFixed(2)}
+            </p>
+          </div>
+          <div className="text-center">
+            <p className="text-sm text-gray-500">Information Ratio</p>
+            <p className="text-lg font-semibold">
+              {(riskMetrics?.informationRatio || 0).toFixed(2)}
+            </p>
+          </div>
+        </div>
         <div className="flex flex-wrap items-center justify-center mt-4 space-x-4 space-y-2 sm:space-y-0">
           <div className="flex items-center">
             <div className="w-3 h-3 rounded-full bg-primary mr-2"></div>

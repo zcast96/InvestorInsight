@@ -207,155 +207,16 @@ export function calculateMaxDrawdown(values: number[]): number {
 }
 
 /**
- * Calculate Attribution Analysis with detailed breakdown
+ * Calculate Attribution Analysis
  */
 export function calculateAttribution(
   portfolioReturns: number[],
   benchmarkReturns: number[],
   weights: number[]
-): { allocation: number; selection: number; interaction: number; details: AttributionDetail[] } {
+): { allocation: number; selection: number; interaction: number } {
   if (portfolioReturns.length === 0 || portfolioReturns.length !== benchmarkReturns.length) {
-    return { allocation: 0, selection: 0, interaction: 0, details: [] };
+    return { allocation: 0, selection: 0, interaction: 0 };
   }
-
-  const details = weights.map((weight, i) => ({
-    weight,
-    allocation: weight * (benchmarkReturns[i] - benchmarkReturns[i]),
-    selection: weight * (portfolioReturns[i] - benchmarkReturns[i]),
-    interaction: weight * (portfolioReturns[i] - benchmarkReturns[i]) * (benchmarkReturns[i] - benchmarkReturns[i])
-  }));
-
-  return {
-    allocation: details.reduce((sum, d) => sum + d.allocation, 0),
-    selection: details.reduce((sum, d) => sum + d.selection, 0),
-    interaction: details.reduce((sum, d) => sum + d.interaction, 0),
-    details
-  };
-}
-
-/**
- * Calculate Dividend Metrics
- */
-export function calculateDividendMetrics(
-  dividendHistory: { date: Date; amount: number }[]
-): {
-  yield: number;
-  growth: number;
-  nextPaymentEstimate: number;
-  frequency: 'quarterly' | 'monthly' | 'annual' | 'irregular';
-} {
-  if (dividendHistory.length < 2) {
-    return { yield: 0, growth: 0, nextPaymentEstimate: 0, frequency: 'irregular' };
-  }
-
-  const sortedDividends = [...dividendHistory].sort((a, b) => b.date.getTime() - a.date.getTime());
-  const latestDividend = sortedDividends[0].amount;
-  const previousDividend = sortedDividends[1].amount;
-  
-  return {
-    yield: (latestDividend * 4) / 100, // Assumes quarterly payments
-    growth: ((latestDividend - previousDividend) / previousDividend) * 100,
-    nextPaymentEstimate: latestDividend * 1.02, // Simple estimate with 2% growth
-    frequency: determineDividendFrequency(sortedDividends)
-  };
-}
-
-/**
- * Scenario Analysis/Backtesting
- */
-export function runScenarioAnalysis(
-  portfolio: { symbol: string; weight: number }[],
-  historicalData: { [symbol: string]: number[] },
-  scenario: 'bearMarket' | 'bullMarket' | 'recession' | 'recovery'
-): {
-  expectedReturn: number;
-  riskLevel: number;
-  drawdown: number;
-  volatility: number;
-} {
-  // Implement scenario-specific adjustments
-  const scenarioMultipliers = {
-    bearMarket: { return: 0.8, risk: 1.5 },
-    bullMarket: { return: 1.2, risk: 0.8 },
-    recession: { return: 0.7, risk: 1.8 },
-    recovery: { return: 1.3, risk: 0.9 }
-  };
-
-  const multiplier = scenarioMultipliers[scenario];
-  const baselineReturn = calculatePortfolioReturn(portfolio, historicalData);
-  const baselineRisk = calculatePortfolioRisk(portfolio, historicalData);
-
-  return {
-    expectedReturn: baselineReturn * multiplier.return,
-    riskLevel: baselineRisk * multiplier.risk,
-    drawdown: calculateMaxDrawdown(Object.values(historicalData)[0]) * multiplier.risk,
-    volatility: calculateVolatility(Object.values(historicalData)[0]) * multiplier.risk
-  };
-}
-
-/**
- * Tax Loss Harvesting Opportunities
- */
-export function findHarvestingOpportunities(
-  holdings: { symbol: string; costBasis: number; currentPrice: number; purchaseDate: Date }[]
-): {
-  symbol: string;
-  potentialLoss: number;
-  daysHeld: number;
-  recommendation: 'harvest' | 'wait' | 'hold';
-}[] {
-  const today = new Date();
-  
-  return holdings.map(holding => {
-    const loss = holding.currentPrice - holding.costBasis;
-    const daysHeld = Math.floor((today.getTime() - holding.purchaseDate.getTime()) / (1000 * 60 * 60 * 24));
-    
-    let recommendation: 'harvest' | 'wait' | 'hold' = 'hold';
-    if (loss < 0) {
-      recommendation = daysHeld > 30 ? 'harvest' : 'wait';
-    }
-
-    return {
-      symbol: holding.symbol,
-      potentialLoss: Math.min(0, loss),
-      daysHeld,
-      recommendation
-    };
-  });
-}
-
-/**
- * Risk Analysis
- */
-export function calculateRiskMetrics(
-  returns: number[],
-  benchmarkReturns: number[]
-): {
-  alpha: number;
-  beta: number;
-  sharpeRatio: number;
-  treynorRatio: number;
-  informationRatio: number;
-  trackingError: number;
-} {
-  const riskFreeRate = 0.02; // Assuming 2% risk-free rate
-  const portfolioStdev = calculateVolatility(returns);
-  const benchmarkStdev = calculateVolatility(benchmarkReturns);
-  const correlation = calculateCorrelation(returns, benchmarkReturns);
-  
-  const beta = (correlation * portfolioStdev) / benchmarkStdev;
-  const portfolioReturn = returns.reduce((a, b) => a + b, 0) / returns.length;
-  const benchmarkReturn = benchmarkReturns.reduce((a, b) => a + b, 0) / benchmarkReturns.length;
-  
-  return {
-    alpha: portfolioReturn - (riskFreeRate + beta * (benchmarkReturn - riskFreeRate)),
-    beta,
-    sharpeRatio: (portfolioReturn - riskFreeRate) / portfolioStdev,
-    treynorRatio: (portfolioReturn - riskFreeRate) / beta,
-    informationRatio: (portfolioReturn - benchmarkReturn) / calculateTrackingError(returns, benchmarkReturns),
-    trackingError: calculateTrackingError(returns, benchmarkReturns)
-  };
-}
   
   const allocation = weights.reduce((sum, weight, i) => 
     sum + weight * (benchmarkReturns[i] - benchmarkReturns[i]), 0);

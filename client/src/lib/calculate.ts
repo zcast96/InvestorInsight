@@ -120,6 +120,117 @@ export function calculateVolatility(returns: number[]): number {
   // Calculate average return
   const mean = returns.reduce((sum, value) => sum + value, 0) / returns.length;
   
+
+
+/**
+ * Calculate Time-Weighted Return (TWR)
+ * TWR eliminates the impact of cash flows on returns
+ */
+export function calculateTWR(
+  periodReturns: number[],
+  timestamps: Date[]
+): number {
+  if (periodReturns.length === 0) return 0;
+  
+  // Calculate compound return
+  const twr = periodReturns.reduce((acc, return_) => (1 + acc) * (1 + return_) - 1, 0);
+  return twr;
+}
+
+/**
+ * Calculate Money-Weighted Return (Internal Rate of Return)
+ */
+export function calculateMWR(
+  cashFlows: number[],
+  dates: Date[],
+  finalValue: number
+): number {
+  if (cashFlows.length === 0) return 0;
+  
+  // Newton-Raphson method to find IRR
+  let guess = 0.1; // Initial guess of 10%
+  const maxIterations = 100;
+  const tolerance = 0.0001;
+  
+  for (let i = 0; i < maxIterations; i++) {
+    let npv = -finalValue;
+    let derivative = 0;
+    const t0 = dates[0].getTime();
+    
+    for (let j = 0; j < cashFlows.length; j++) {
+      const t = (dates[j].getTime() - t0) / (365 * 24 * 60 * 60 * 1000);
+      npv += cashFlows[j] * Math.pow(1 + guess, t);
+      derivative += t * cashFlows[j] * Math.pow(1 + guess, t - 1);
+    }
+    
+    if (Math.abs(npv) < tolerance) break;
+    guess = guess - npv / derivative;
+  }
+  
+  return guess;
+}
+
+/**
+ * Calculate Value at Risk (VaR)
+ * Using historical simulation method
+ */
+export function calculateVaR(
+  returns: number[],
+  confidence: number = 0.95
+): number {
+  if (returns.length === 0) return 0;
+  
+  const sortedReturns = [...returns].sort((a, b) => a - b);
+  const index = Math.floor((1 - confidence) * returns.length);
+  return -sortedReturns[index];
+}
+
+/**
+ * Calculate Maximum Drawdown
+ */
+export function calculateMaxDrawdown(values: number[]): number {
+  if (values.length < 2) return 0;
+  
+  let maxDrawdown = 0;
+  let peak = values[0];
+  
+  for (const value of values) {
+    if (value > peak) {
+      peak = value;
+    } else {
+      const drawdown = (peak - value) / peak;
+      maxDrawdown = Math.max(maxDrawdown, drawdown);
+    }
+  }
+  
+  return maxDrawdown;
+}
+
+/**
+ * Calculate Attribution Analysis
+ */
+export function calculateAttribution(
+  portfolioReturns: number[],
+  benchmarkReturns: number[],
+  weights: number[]
+): { allocation: number; selection: number; interaction: number } {
+  if (portfolioReturns.length === 0 || portfolioReturns.length !== benchmarkReturns.length) {
+    return { allocation: 0, selection: 0, interaction: 0 };
+  }
+  
+  const allocation = weights.reduce((sum, weight, i) => 
+    sum + weight * (benchmarkReturns[i] - benchmarkReturns[i]), 0);
+    
+  const selection = weights.reduce((sum, weight, i) => 
+    sum + weight * (portfolioReturns[i] - benchmarkReturns[i]), 0);
+    
+  const interaction = weights.reduce((sum, weight, i) => 
+    sum + weight * (portfolioReturns[i] - benchmarkReturns[i]) * 
+    (benchmarkReturns[i] - benchmarkReturns[i]), 0);
+    
+  return { allocation, selection, interaction };
+}
+
   // Calculate sum of squared differences
   const squaredDifferencesSum = returns.reduce((sum, value) => {
     const difference = value - mean;

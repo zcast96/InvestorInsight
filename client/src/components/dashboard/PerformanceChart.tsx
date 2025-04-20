@@ -36,7 +36,7 @@ ChartJS.register(
 const PerformanceChart: React.FC = () => {
   const [period, setPeriod] = useState<string>('1Y');
   const { data, isLoading, error } = usePortfolioPerformance(period);
-  
+
   // Prepare chart data
   const chartData: ChartData<'line'> = {
     labels: data?.portfolioData.map(d => d.date) || [],
@@ -149,6 +149,33 @@ const PerformanceChart: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="text-danger">Error loading performance data</div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 p-4 border-t">
+            <div className="text-center">
+              <p className="text-sm text-gray-500">Time-Weighted Return</p>
+              <p className="text-lg font-semibold">
+                {formatPercentage(calculateTWR(
+                  data.portfolioData.map(d => d.percentage / 100),
+                  data.portfolioData.map(d => new Date(d.date))
+                ) * 100)}
+              </p>
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-gray-500">Max Drawdown</p>
+              <p className="text-lg font-semibold">
+                {formatPercentage(calculateMaxDrawdown(
+                  data.portfolioData.map(d => d.value)
+                ) * 100)}
+              </p>
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-gray-500">Value at Risk (95%)</p>
+              <p className="text-lg font-semibold">
+                {formatPercentage(calculateVaR(
+                  data.portfolioData.map(d => d.percentage / 100)
+                ) * 100)}
+              </p>
+            </div>
+          </div>
         </CardContent>
       </Card>
     );

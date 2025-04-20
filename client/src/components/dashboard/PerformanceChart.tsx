@@ -183,6 +183,14 @@ const PerformanceChart: React.FC = () => {
     );
   }
 
+  // Calculate risk metrics
+  const riskMetrics = data ? {
+    alpha: 2.5, // Sample value - replace with actual calculation
+    beta: 0.85, // Sample value - replace with actual calculation
+    sharpeRatio: 1.2, // Sample value - replace with actual calculation
+    informationRatio: 0.95 // Sample value - replace with actual calculation
+  } : null;
+
   // Calculate last values for legend
   const portfolioLastValue = data.portfolioData[data.portfolioData.length - 1]?.percentage || 0;
   const spyLastValue = data.benchmarkData.SPY?.[data.benchmarkData.SPY.length - 1]?.percentage || 0;

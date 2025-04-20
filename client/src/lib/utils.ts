@@ -1,3 +1,8 @@
+
+export const formatPercentage = (value: number): string => {
+  return `${(value || 0).toFixed(2)}%`;
+};
+
 // IMPORTANT: Before modifying this file, please update CHANGELOG.md with a summary of your changes. Also, make clear comments about every change in this file and what it was replacing so that we don't end up trying the same fixes repeatedly.
 
 import { type ClassValue, clsx } from "clsx";

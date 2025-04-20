@@ -20,6 +20,8 @@ import {
   ChartData,
   ChartOptions
 } from 'chart.js';
+import { AnimatedChart } from "../animations";
+import { formatPercentage } from "@/lib/utils";
 
 // Register Chart.js components
 ChartJS.register(
